@@ -8,7 +8,7 @@ This visualization has the property to keep the edge lengths uniform, creating a
 
 python3 preinstalled with packages _networkx_ and _matplotlib_
 
-> pip install networkx matplotlib 
+> pip install -r requirements.txt 
 
 ## How to run
 
