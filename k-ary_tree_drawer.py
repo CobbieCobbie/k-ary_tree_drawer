@@ -90,14 +90,14 @@ def draw_vertices(v, r, h, k, G):
         d = 2*pow(k, h-v.height-1)
         x_start = v.coordinates[0] - (k-1)*pow(k, h-v.height-1)
         for i in range(k):
-            print(i)
+            # print(i)
             x_coord = x_start + i * d
-            print("x_coord: "+str(x_coord))
-            print("v.coordinates: " + str(v.coordinates[1]))
+            # print("x_coord: "+str(x_coord))
+            # print("v.coordinates: " + str(v.coordinates[1]))
             y_coord = v.coordinates[1] - math.sqrt(r*r - (x_coord - v.coordinates[0])*(x_coord - v.coordinates[0]))
             y_coord = round(y_coord, 0)
             v_child = Vertex(x_coord, y_coord, v.height+1)
-            print(v_child)
+            # print(v_child)
 
             G.add_node(v_child)
             global v_counter, v_max
