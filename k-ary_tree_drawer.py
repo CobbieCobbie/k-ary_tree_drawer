@@ -2,6 +2,7 @@ import sys
 import math
 import networkx as nx
 import matplotlib.pyplot as plot
+import time
 
 
 class Vertex:
@@ -22,6 +23,7 @@ l_min = float("inf")
 
 
 def main():
+    _time = time.time()
     k = 2
     h = 3
     args = sys.argv[1:]
@@ -65,6 +67,11 @@ def main():
     print("l_min: " + str(l_min))
     print("l_max: " + str(l_max))
     print("Ratio of resulting drawing: " + str(l_max / l_min))
+
+    _time = time.time() - _time
+    _minutes = (int) (_time / 60)
+    _seconds = _time % 60
+    print(f"The process took {_minutes:.0f} minutes and {_seconds:.3f} seconds!")
     plot.show()
 
 
