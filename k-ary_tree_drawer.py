@@ -23,6 +23,9 @@ l_min = float("inf")
 
 
 def main():
+
+    # argument eval
+
     _time = time.time()
     k = 2
     h = 3
@@ -40,20 +43,24 @@ def main():
 
     # further initializations
 
-    root = Vertex(0, 0, 0)
-    r = pow(k, h)
-    print("k: " + str(k))
-    print("height: " + str(h))
-    print("radius: " + str(r))
-
-    G = nx.Graph()
-    G.add_node(root)
-
     global v_counter, v_max
     v_max = (pow(k, h + 1) - 1) / (k - 1)
     v_counter += 1
 
+    r = pow(k, h)
+    G = nx.Graph()
+    root = Vertex(0, 0, 0)
+
+    # add root to G
+
+    G.add_node(root)
+
+    # draw recursively
+
     draw_vertices(root, r, h, k, G)
+
+    # address the positions in a dict and draw
+
     pos = {v: v.coordinates for v in G}
     nx.draw(G,
             pos=pos,
@@ -63,13 +70,16 @@ def main():
             node_size=10,
             style="-.",
             )
+
+    # print results
+
     print("########################################")
     print("l_min: " + str(l_min))
     print("l_max: " + str(l_max))
     print("Ratio of resulting drawing: " + str(l_max / l_min))
 
     _time = time.time() - _time
-    _minutes = (int) (_time / 60)
+    _minutes = int(_time / 60)
     _seconds = _time % 60
     print(f"The process took {_minutes:.0f} minutes and {_seconds:.3f} seconds!")
     plot.show()
@@ -80,14 +90,14 @@ def draw_vertices(v, r, h, k, G):
         d = 2*pow(k, h-v.height-1)
         x_start = v.coordinates[0] - (k-1)*pow(k, h-v.height-1)
         for i in range(k):
-            print(i)
+            # print(i)
             x_coord = x_start + i * d
-            print("x_coord: "+str(x_coord))
-            print("v.coordinates: " + str(v.coordinates[1]))
+            # print("x_coord: "+str(x_coord))
+            # print("v.coordinates: " + str(v.coordinates[1]))
             y_coord = v.coordinates[1] - math.sqrt(r*r - (x_coord - v.coordinates[0])*(x_coord - v.coordinates[0]))
             y_coord = round(y_coord, 0)
             v_child = Vertex(x_coord, y_coord, v.height+1)
-            print(v_child)
+            # print(v_child)
 
             G.add_node(v_child)
             global v_counter, v_max
