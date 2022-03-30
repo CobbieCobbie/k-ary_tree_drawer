@@ -72,11 +72,10 @@ def main():
     # time init
 
     _time = time.time()
-    timestamp = time.gmtime()
 
     # logging init
 
-    if args.logging == True:
+    if args.logging is True:
         log.info("Parameters:")
         log.info(f"k = {k}, h = {h}, integer grid = {integer_grid}")
         folder = 'logging'
@@ -85,11 +84,6 @@ def main():
         if not os.path.exists(folder):
             os.makedirs(folder)
         log.basicConfig(filename=full_path, encoding='utf-8', level=log.DEBUG, force=True)
-
-        # log.basicConfig(filename=f"logging/"
-        #                         f"{timestamp.tm_year}-{timestamp.tm_mon}-{timestamp.tm_mday}_"
-        #                         f"{timestamp.tm_hour}h{timestamp.tm_min}m{timestamp.tm_sec}s_"
-        #                         f"{k}-ary_tree_with_h={h}.log", encoding='utf-8', level=log.DEBUG)
 
     global v_counter, v_max
     v_max = (pow(k, h + 1) - 1) / (k - 1)
@@ -168,7 +162,7 @@ def draw_vertices(v, r, h, k, G):
             percent = round((v_counter / v_max) * 100, 0)
             if percent > percentage:
                 percentage = percent
-                #print(f"Percentage of vertices processed: {percent}%")
+                print(f"Percentage of vertices processed: {percent}%")
             draw_vertices(v_child, r, h, k, G)
 
 
