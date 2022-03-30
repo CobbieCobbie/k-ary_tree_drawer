@@ -1,3 +1,7 @@
+# PyCharm env
+
+.idea/*
+
 # log files
 
 *.log

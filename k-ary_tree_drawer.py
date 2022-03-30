@@ -1,4 +1,5 @@
 import math
+import os
 import networkx as nx
 import matplotlib.pyplot as plot
 import time
@@ -49,27 +50,42 @@ def main():
                         action=argparse.BooleanOptionalAction,
                         default=False,
                         help="Places the vertices on integer grid points by rounding the coordinates")
+    parser.add_argument("--logging",
+                        "-l",
+                        dest="logging",
+                        default=False,
+                        type=bool,
+                        action=argparse.BooleanOptionalAction,
+                        help="Enable / Disable a log of the graph drawn"
+                        )
     args = parser.parse_args()
 
-    # further initializations
+    # global variable initializations
 
     global k, h, integer_grid
-    if args.k is not None:
-        k = args.k
-    if args.h is not None:
-        h = args.h
-    if args.integer is not None:
-        integer_grid = args.integer
 
-    log.info("Parameters:")
-    log.info(f"k = {k}, h = {h}, integer grid = {integer_grid}")
+    k = args.k
+    h = args.h
+    integer_grid = args.integer
+
+    # time init
 
     _time = time.time()
     timestamp = time.gmtime()
 
-    log.basicConfig(filename=f"{timestamp.tm_year}-{timestamp.tm_mon}-{timestamp.tm_mday}_"
-                             f"{timestamp.tm_hour}h{timestamp.tm_min}m{timestamp.tm_sec}s_"
-                             f"{k}-ary_tree_with_h={h}.log", encoding='utf-8', level=log.DEBUG)
+    # logging init
+
+    if args.logging is True:
+        log.info("Parameters:")
+        log.info(f"k = {k}, h = {h}, integer grid = {integer_grid}")
+        if not os.path.exists('logging'):
+            os.makedirs('logging')
+        log.basicConfig(filename=f"log.log", encoding='utf-8', level=log.DEBUG)
+
+        # log.basicConfig(filename=f"logging/"
+        #                         f"{timestamp.tm_year}-{timestamp.tm_mon}-{timestamp.tm_mday}_"
+        #                         f"{timestamp.tm_hour}h{timestamp.tm_min}m{timestamp.tm_sec}s_"
+        #                         f"{k}-ary_tree_with_h={h}.log", encoding='utf-8', level=log.DEBUG)
 
     global v_counter, v_max
     v_max = (pow(k, h + 1) - 1) / (k - 1)
@@ -101,17 +117,20 @@ def main():
 
     # print results
 
-    print("########################################")
-    log.debug("l_min: " + str(l_min))
-    print("l_min: " + str(l_min))
-    print("l_max: " + str(l_max))
-    print("Ratio of resulting drawing: " + str(l_max / l_min))
-    log.debug("l_max: " + str(l_max))
-    log.debug("Ratio of resulting drawing: " + str(l_max / l_min))
-
     _time = time.time() - _time
     _minutes = int(_time / 60)
     _seconds = _time % 60
+
+    print("########################################")
+    print("l_min: " + str(l_min))
+    print("l_max: " + str(l_max))
+    print("Ratio of resulting drawing: " + str(l_max / l_min))
+
+    if args.logging is True:
+        log.debug("l_min: " + str(l_min))
+        log.debug("l_max: " + str(l_max))
+        log.debug("Ratio of resulting drawing: " + str(l_max / l_min))
+
     print(f"The process took {_minutes:.0f} minutes and {_seconds:.3f} seconds!")
     plot.show()
 
