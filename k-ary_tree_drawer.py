@@ -5,6 +5,7 @@ import matplotlib.pyplot as plot
 import time
 import logging as log
 import argparse
+from datetime import datetime
 
 
 class Vertex:
@@ -75,12 +76,15 @@ def main():
 
     # logging init
 
-    if args.logging is True:
+    if args.logging == True:
         log.info("Parameters:")
         log.info(f"k = {k}, h = {h}, integer grid = {integer_grid}")
-        if not os.path.exists('logging'):
-            os.makedirs('logging')
-        log.basicConfig(filename=f"log.log", encoding='utf-8', level=log.DEBUG)
+        folder = 'logging'
+        file_name = datetime.today().strftime('%Y-%m-%d_%H-%M-%S') + '.log'
+        full_path = os.path.join(folder, file_name)
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        log.basicConfig(filename=full_path, encoding='utf-8', level=log.DEBUG, force=True)
 
         # log.basicConfig(filename=f"logging/"
         #                         f"{timestamp.tm_year}-{timestamp.tm_mon}-{timestamp.tm_mday}_"
@@ -164,7 +168,7 @@ def draw_vertices(v, r, h, k, G):
             percent = round((v_counter / v_max) * 100, 0)
             if percent > percentage:
                 percentage = percent
-                print(f"Percentage of vertices processed: {percent}%")
+                #print(f"Percentage of vertices processed: {percent}%")
             draw_vertices(v_child, r, h, k, G)
 
 
