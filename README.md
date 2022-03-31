@@ -14,7 +14,7 @@ python3 preinstalled with packages _networkx_ and _matplotlib_
 
 Exemplary execution of a tertiary tree of height 4
 
-> python ./k-ary_tree_drawer.py -k 3 -h 4
+> python ./k-ary_tree_drawer.py -k 3 -he 4
 
 Without arguments, the code defaults to setting k=2, h=3
 
