@@ -9,13 +9,14 @@ from datetime import datetime
 
 
 class Vertex:
-    def __init__(self, x, y, h):
+    def __init__(self, x, y, h, id):
         self.coordinates = (x, y)
         self.height = h
+        self.id = id
 
     def __repr__(self):
         return "coordinates are: " \
-               + str(self.coordinates[0]) + "," + str(self.coordinates[1]) +\
+               + str(self.coordinates[0]) + "," + str(self.coordinates[1]) + \
                "\n Height equals: " + str(self.height)
 
 
@@ -28,6 +29,11 @@ v_max = 0
 v_counter = 0
 l_max = 0
 l_min = float("inf")
+
+# color counter
+col_r = 255
+col_g = 0
+col_b = 0
 
 
 def main():
@@ -87,30 +93,31 @@ def main():
 
     global v_counter, v_max
     v_max = (pow(k, h + 1) - 1) / (k - 1)
-    v_counter += 1
 
     r = pow(k, h)
     G = nx.Graph()
-    root = Vertex(0, 0, 0)
+    root = Vertex(0, 0, 0, 0)
 
     # add root to G
 
     G.add_node(root)
-
+    v_counter += 1
     # draw recursively
 
     draw_vertices(root, r, h, k, G)
 
     # address the positions in a dict and draw
 
+    fig, ax = plot.subplots()
     pos = {v: v.coordinates for v in G}
+    color_map = [calc_hex_code() for v in G]
     nx.draw(G,
             pos=pos,
             with_labels=False,
-            node_color="black",
-            edge_color="lightblue",
+            node_color=color_map,
+            edge_color="#333333",
             node_size=10,
-            style="-.",
+            style=":"
             )
 
     # print results
@@ -130,35 +137,69 @@ def main():
         log.debug("Ratio of resulting drawing: " + str(l_max / l_min))
 
     print(f"The process took {_minutes:.0f} minutes and {_seconds:.3f} seconds!")
+
+    ax.set_facecolor("black")
+    ax.axis("off")
+    fig.set_facecolor("black")
+
     plot.show()
 
 
+def calc_hex_code():
+    global k, h
+    interval = math.ceil(pow(k, 5*h/8) * 255 / v_max)
+    global col_b, col_g, col_r
+    if col_r == 255 and 0 <= col_g < 255 and col_b == 0:
+        col_g += interval
+        if col_g > 255:
+            col_g = 255
+    elif 0 < col_r <= 255 and col_g == 255 and col_b == 0:
+        col_r -= interval
+        if col_r < 0:
+            col_r = 0
+    elif 0 == col_r and col_g == 255 and 0 <= col_b < 255:
+        col_b += interval
+        if col_b > 255:
+            col_b = 255
+    elif 0 == col_r and 0 < col_g <= 255 and col_b == 255:
+        col_g -= interval
+        if col_g < 0:
+            col_g = 0
+    elif 0 <= col_r < 255 and 0 == col_g and col_b == 255:
+        col_r += interval
+        if col_r > 255:
+            col_r = 255
+    elif col_r == 255 and col_g == 0 and 0 < col_b <= 255:
+        col_b -= interval
+        if col_b < 0:
+            col_b = 0
+    return "#" + ('%02x%02x%02x' % (col_r, col_g, col_b))
+
+
 def draw_vertices(v, r, h, k, G):
-    if v.height <= h-1:
-        d = 2*pow(k, h-v.height-1)
-        x_start = v.coordinates[0] - (k-1)*pow(k, h-v.height-1)
+    if v.height <= h - 1:
+        d = 2 * pow(k, h - v.height - 1)
+        x_start = v.coordinates[0] - (k - 1) * pow(k, h - v.height - 1)
         for i in range(k):
             x_coord = x_start + i * d
-            y_coord = v.coordinates[1] - math.sqrt(r*r - (x_coord - v.coordinates[0])*(x_coord - v.coordinates[0]))
+            y_coord = v.coordinates[1] - math.sqrt(r * r - (x_coord - v.coordinates[0]) * (x_coord - v.coordinates[0]))
             if integer_grid is True:
                 y_coord = round(y_coord, 0)
-            v_child = Vertex(x_coord, y_coord, v.height+1)
-
-            G.add_node(v_child)
-            global v_counter, v_max
+            global v_counter
             v_counter += 1
-
+            v_child = Vertex(x_coord, y_coord, v.height + 1, v_counter)
+            G.add_node(v_child)
             G.add_edge(v, v_child)
             global l_min, l_max
             edge_length = math.sqrt(
-                (v.coordinates[0] - v_child.coordinates[0])**2
+                (v.coordinates[0] - v_child.coordinates[0]) ** 2
                 +
-                (v.coordinates[1] - v_child.coordinates[1])**2)
+                (v.coordinates[1] - v_child.coordinates[1]) ** 2)
             if edge_length < l_min:
                 l_min = edge_length
             if edge_length > l_max:
                 l_max = edge_length
-            global percentage
+            global percentage, v_max
             percent = round((v_counter / v_max) * 100, 0)
             if percent > percentage:
                 percentage = percent
