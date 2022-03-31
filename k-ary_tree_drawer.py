@@ -79,7 +79,7 @@ def main():
         log.info("Parameters:")
         log.info(f"k = {k}, h = {h}, integer grid = {integer_grid}")
         folder = 'logging'
-        file_name = datetime.today().strftime('%Y-%m-%d_%H-%M-%S') + '.log'
+        file_name = datetime.today().strftime('%Y-%m-%d_%H-%M-%S') + f"_{k}-ary_tree_with_height_{h}" + '.log'
         full_path = os.path.join(folder, file_name)
         if not os.path.exists(folder):
             os.makedirs(folder)
