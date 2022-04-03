@@ -65,6 +65,14 @@ def main():
                         action=argparse.BooleanOptionalAction,
                         help="Enable / Disable a log of the graph drawn"
                         )
+    parser.add_argument("--color",
+                        "-c",
+                        dest="color",
+                        default=False,
+                        type=bool,
+                        action=argparse.BooleanOptionalAction,
+                        help="Enable / Disable coloring of the vertices"
+                        )
     args = parser.parse_args()
 
     # global variable initializations
@@ -92,8 +100,10 @@ def main():
         log.basicConfig(filename=full_path, encoding='utf-8', level=log.DEBUG, force=True)
 
     global v_counter, v_max
-    v_max = (pow(k, h + 1) - 1) / (k - 1)
-
+    if k > 1:
+        v_max = (pow(k, h + 1) - 1) / (k - 1)
+    else:
+        v_max = h+1
     r = pow(k, h)
     G = nx.Graph()
     root = Vertex(0, 0, 0, 0)
@@ -110,7 +120,10 @@ def main():
 
     fig, ax = plot.subplots()
     pos = {v: v.coordinates for v in G}
-    color_map = [calc_hex_code() for v in G]
+    if args.color is True:
+        color_map = [calc_hex_code() for v in G]
+    else:
+        color_map = ["#ffffff" for v in G]
     nx.draw(G,
             pos=pos,
             with_labels=False,
@@ -147,7 +160,7 @@ def main():
 
 def calc_hex_code():
     global k, h
-    interval = math.ceil(pow(k, 5*h/8) * 255 / v_max)
+    interval = min(k, h) * 255 / pow(k, h)
     global col_b, col_g, col_r
     if col_r == 255 and 0 <= col_g < 255 and col_b == 0:
         col_g += interval
@@ -173,7 +186,7 @@ def calc_hex_code():
         col_b -= interval
         if col_b < 0:
             col_b = 0
-    return "#" + ('%02x%02x%02x' % (col_r, col_g, col_b))
+    return "#" + ('%02x%02x%02x' % (round(col_r), round(col_g), round(col_b)))
 
 
 def draw_vertices(v, r, h, k, G):
