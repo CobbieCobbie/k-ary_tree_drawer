@@ -117,11 +117,11 @@ def main():
     draw_vertices(root, r, h, k, G)
 
     # address the positions in a dict and draw
-
     fig, ax = plot.subplots()
     pos = {v: v.coordinates for v in G}
     if args.color is True:
         color_map = [calc_hex_code() for v in G]
+        color_map[0] = "#ffffff"
     else:
         color_map = ["#ffffff" for v in G]
     nx.draw(G,
@@ -153,6 +153,8 @@ def main():
 
     ax.set_facecolor("black")
     ax.axis("off")
+    ax.set_aspect("equal")
+
     fig.set_facecolor("black")
 
     plot.show()
@@ -160,6 +162,7 @@ def main():
 
 def calc_hex_code():
     global k, h
+
     interval = min(k, h) * 255 / pow(k, h)
     global col_b, col_g, col_r
     if col_r == 255 and 0 <= col_g < 255 and col_b == 0:
