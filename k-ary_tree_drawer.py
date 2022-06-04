@@ -121,9 +121,9 @@ def main():
     pos = {v: v.coordinates for v in G}
     if args.color is True:
         color_map = [calc_hex_code() for v in G]
-        color_map[0] = "#ffffff"
+        color_map[0] = "#000000"
     else:
-        color_map = ["#ffffff" for v in G]
+        color_map = ["#000000" for v in G]
     nx.draw(G,
             pos=pos,
             with_labels=False,
@@ -151,11 +151,11 @@ def main():
 
     print(f"The process took {_minutes:.0f} minutes and {_seconds:.3f} seconds!")
 
-    ax.set_facecolor("black")
+    ax.set_facecolor("white")
     ax.axis("off")
     ax.set_aspect("equal")
 
-    fig.set_facecolor("black")
+    fig.set_facecolor("white")
 
     plot.show()
 
