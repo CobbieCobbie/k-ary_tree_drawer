@@ -1,11 +1,12 @@
 import math
 import os
 import networkx as nx
-import matplotlib.pyplot as plot
 import time
 import logging as log
 import argparse
 from datetime import datetime
+
+import matplotlib.pyplot as plt
 
 
 class Vertex:
@@ -76,19 +77,15 @@ def main():
     args = parser.parse_args()
 
     # global variable initializations
-
     global k, h, integer_grid
-
     k = args.k
     h = args.h
     integer_grid = args.integer
 
     # time init
-
     _time = time.time()
 
     # logging init
-
     if args.logging is True:
         log.info("Parameters:")
         log.info(f"k = {k}, h = {h}, integer grid = {integer_grid}")
@@ -103,17 +100,16 @@ def main():
     if k > 1:
         v_max = (pow(k, h + 1) - 1) / (k - 1)
     else:
-        v_max = h+1
+        v_max = h + 1
     r = pow(k, h)
     G = nx.Graph()
     root = Vertex(0, 0, 0, 0)
 
     # add root to G
-
     G.add_node(root)
     v_counter += 1
-    # draw recursively
 
+    # draw recursively
     draw_vertices(root, r, h, k, G)
 
     # address the positions in a dict and draw
@@ -134,7 +130,6 @@ def main():
             )
 
     # print results
-
     _time = time.time() - _time
     _minutes = int(_time / 60)
     _seconds = _time % 60
@@ -157,12 +152,12 @@ def main():
 
     fig.set_facecolor("white")
 
-    plot.show()
+    return plot
+    # plot.show()
 
 
 def calc_hex_code():
     global k, h
-
     interval = min(k, h) * 255 / pow(k, h)
     global col_b, col_g, col_r
     if col_r == 255 and 0 <= col_g < 255 and col_b == 0:
