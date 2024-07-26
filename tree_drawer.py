@@ -81,79 +81,11 @@ def main():
     k = args.k
     h = args.h
     integer_grid = args.integer
+    logging = args.logging
+    color = args.color
 
-    # time init
-    _time = time.time()
-
-    # logging init
-    if args.logging is True:
-        log.info("Parameters:")
-        log.info(f"k = {k}, h = {h}, integer grid = {integer_grid}")
-        folder = 'logging'
-        file_name = datetime.today().strftime('%Y-%m-%d_%H-%M-%S') + f"_{k}-ary_tree_with_height_{h}" + '.log'
-        full_path = os.path.join(folder, file_name)
-        if not os.path.exists(folder):
-            os.makedirs(folder)
-        log.basicConfig(filename=full_path, encoding='utf-8', level=log.DEBUG, force=True)
-
-    global v_counter, v_max
-    if k > 1:
-        v_max = (pow(k, h + 1) - 1) / (k - 1)
-    else:
-        v_max = h + 1
-    r = pow(k, h)
-    G = nx.Graph()
-    root = Vertex(0, 0, 0, 0)
-
-    # add root to G
-    G.add_node(root)
-    v_counter += 1
-
-    # draw recursively
-    draw_vertices(root, r, h, k, G)
-
-    # address the positions in a dict and draw
-    fig, ax = plot.subplots()
-    pos = {v: v.coordinates for v in G}
-    if args.color is True:
-        color_map = [calc_hex_code() for v in G]
-        color_map[0] = "#000000"
-    else:
-        color_map = ["#000000" for v in G]
-    nx.draw(G,
-            pos=pos,
-            with_labels=False,
-            node_color=color_map,
-            edge_color="#333333",
-            node_size=10,
-            style=":"
-            )
-
-    # print results
-    _time = time.time() - _time
-    _minutes = int(_time / 60)
-    _seconds = _time % 60
-
-    print("########################################")
-    print("l_min: " + str(l_min))
-    print("l_max: " + str(l_max))
-    print("Ratio of resulting drawing: " + str(l_max / l_min))
-
-    if args.logging is True:
-        log.debug("l_min: " + str(l_min))
-        log.debug("l_max: " + str(l_max))
-        log.debug("Ratio of resulting drawing: " + str(l_max / l_min))
-
-    print(f"The process took {_minutes:.0f} minutes and {_seconds:.3f} seconds!")
-
-    ax.set_facecolor("white")
-    ax.axis("off")
-    ax.set_aspect("equal")
-
-    fig.set_facecolor("white")
-
-    return plot
-    # plot.show()
+    plot = draw(k, h, integer_grid, logging, color)
+    plot.show()
 
 
 def calc_hex_code():
@@ -218,5 +150,74 @@ def draw_vertices(v, r, h, k, G):
             draw_vertices(v_child, r, h, k, G)
 
 
+def draw(k, h, integer, logging, color):
+    integer_grid = integer
+
+    # time init
+    _time = time.time()
+
+    # logging init
+    if logging is True:
+        log.info("Parameters:")
+        log.info(f"k = {k}, h = {h}, integer grid = {integer_grid}")
+        folder = 'logging'
+        file_name = datetime.today().strftime('%Y-%m-%d_%H-%M-%S') + f"_{k}-ary_tree_with_height_{h}" + '.log'
+        full_path = os.path.join(folder, file_name)
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        log.basicConfig(filename=full_path, encoding='utf-8', level=log.DEBUG, force=True)
+
+    global v_counter, v_max
+    if k > 1:
+        v_max = (pow(k, h + 1) - 1) / (k - 1)
+    else:
+        v_max = h + 1
+    r = pow(k, h)
+    G = nx.Graph()
+    root = Vertex(0, 0, 0, 0)
+
+    # add root to G
+    G.add_node(root)
+    v_counter += 1
+
+    # draw recursively
+    draw_vertices(root, r, h, k, G)
+
+    # address the positions in a dict and draw
+    fig, ax = plt.subplots()
+    pos = {v: v.coordinates for v in G}
+    if color is True:
+        color_map = [calc_hex_code() for v in G]
+        color_map[0] = "#000000"
+    else:
+        color_map = ["#000000" for v in G]
+    nx.draw(G,
+            pos=pos,
+            with_labels=False,
+            node_color=color_map,
+            edge_color="#333333",
+            node_size=10,
+            style=":"
+            )
+
+    # print results
+    _time = time.time() - _time
+    _minutes = int(_time / 60)
+    _seconds = _time % 60
+    percentage = 0.0
+
+    print("########################################")
+    print("l_min: " + str(l_min))
+    print("l_max: " + str(l_max))
+    print("Ratio of resulting drawing: " + str(l_max / l_min))
+    print(f"The process took {_minutes:.0f} minutes and {_seconds:.3f} seconds!")
+
+    ax.set_facecolor("white")
+    ax.axis("off")
+    ax.set_aspect("equal")
+
+    fig.set_facecolor("white")
+    return plt
+    
 if __name__ == "__main__":
     main()

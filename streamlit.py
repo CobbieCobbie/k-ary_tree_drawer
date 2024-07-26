@@ -12,8 +12,8 @@ def main():
     logging = st.sidebar.checkbox("Enable / Disable a log of the graph drawn")
     color = st.sidebar.checkbox("Enable / Disable coloring of the vertices")
     if st.sidebar.button("Draw Tree"):
-        draw.main(k, h, integer, logging, color)
-        # draw.draw_tree(k, h, integer, logging, color)
+        figure = draw.draw(k, h, integer, logging, color)
+        st.pyplot(figure)
 
 if __name__ == "__main__":
     main()
