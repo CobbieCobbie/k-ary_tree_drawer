@@ -1,5 +1,6 @@
 import streamlit as st
 import tree_drawer as draw
+import mpld3
 
 
 def main():
@@ -13,7 +14,8 @@ def main():
     color = st.sidebar.checkbox("Enable / Disable coloring of the vertices")
     if st.sidebar.button("Draw Tree"):
         figure = draw.draw(k, h, integer, logging, color)
-        st.pyplot(figure)
+        figure_html = mpld3.fig_to_html(figure)
+        st.components.v1.html(figure_html)
 
 if __name__ == "__main__":
     main()

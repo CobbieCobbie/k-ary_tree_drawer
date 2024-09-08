@@ -184,7 +184,10 @@ def draw(k, h, integer, logging, color):
     draw_vertices(root, r, h, k, G)
 
     # address the positions in a dict and draw
-    fig, ax = plt.subplots()
+    two_subplot_fig = plt.figure()
+    fig = plt.subplot()
+    #ax = plt.subplot()
+
     pos = {v: v.coordinates for v in G}
     if color is True:
         color_map = [calc_hex_code() for v in G]
@@ -212,12 +215,13 @@ def draw(k, h, integer, logging, color):
     print("Ratio of resulting drawing: " + str(l_max / l_min))
     print(f"The process took {_minutes:.0f} minutes and {_seconds:.3f} seconds!")
 
-    ax.set_facecolor("white")
-    ax.axis("off")
-    ax.set_aspect("equal")
+    #ax.set_facecolor("white")
+    #ax.axis("off")
+    #ax.set_aspect("equal")
 
-    fig.set_facecolor("white")
-    return plt
+    #fig.set_facecolor("white")
+    plt.plot()
+    return two_subplot_fig
     
 if __name__ == "__main__":
     main()
