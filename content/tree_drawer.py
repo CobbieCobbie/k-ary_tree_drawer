@@ -218,6 +218,7 @@ def draw(k, h, integer, logging, color):
 
     fig.set_facecolor("white")
     return plt
-    
+
+
 if __name__ == "__main__":
     main()

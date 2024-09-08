@@ -251,3 +251,27 @@ fabric.properties
 .idea/codestream.xml
 
 # End of https://www.toptal.com/developers/gitignore/api/pycharm
+
+# Created by https://www.toptal.com/developers/gitignore/api/virtualenv
+# Edit at https://www.toptal.com/developers/gitignore?templates=virtualenv
+
+### VirtualEnv ###
+# Virtualenv
+# http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
+.Python
+[Bb]in
+[Ee]tc
+[Ii]nclude
+[Ll]ib
+[Ll]ib64
+[Ll]ocal
+[Ss]cripts
+[Ss]hare
+pyvenv.cfg
+.venv
+pip-selfcheck.json
+
+# End of https://www.toptal.com/developers/gitignore/api/virtualenv
+
+[Ss]hare
+[Ee]tc
