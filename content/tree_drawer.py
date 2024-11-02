@@ -3,7 +3,7 @@ import os
 import networkx as nx
 import time
 import logging as log
-import argparse
+import argparser as arg
 from datetime import datetime
 
 import matplotlib.pyplot as plt
@@ -38,44 +38,9 @@ col_b = 0
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Draws a k-ary tree with parameters k and height h")
-    parser.add_argument("-k",
-                        type=int,
-                        dest="k",
-                        default=2,
-                        help="Maximum amount of children for any vertex, defaults to 2"
-                        )
-    parser.add_argument("--height",
-                        "-he",
-                        type=int,
-                        dest="h",
-                        default=3,
-                        help="Height of the k-ary tree, defaults to 3")
-    parser.add_argument("--integer",
-                        "-i",
-                        dest="integer",
-                        type=bool,
-                        action=argparse.BooleanOptionalAction,
-                        default=False,
-                        help="Places the vertices on integer grid points by rounding the coordinates")
-    parser.add_argument("--logging",
-                        "-l",
-                        dest="logging",
-                        default=False,
-                        type=bool,
-                        action=argparse.BooleanOptionalAction,
-                        help="Enable / Disable a log of the graph drawn"
-                        )
-    parser.add_argument("--color",
-                        "-c",
-                        dest="color",
-                        default=False,
-                        type=bool,
-                        action=argparse.BooleanOptionalAction,
-                        help="Enable / Disable coloring of the vertices"
-                        )
-    args = parser.parse_args()
-
+    parser = arg.create_parser()
+    parser.parse_args()
+    
     # global variable initializations
     global k, h, integer_grid
     k = args.k
@@ -206,18 +171,20 @@ def draw(k, h, integer, logging, color):
     _seconds = _time % 60
     percentage = 0.0
 
-    print("########################################")
-    print("l_min: " + str(l_min))
-    print("l_max: " + str(l_max))
-    print("Ratio of resulting drawing: " + str(l_max / l_min))
-    print(f"The process took {_minutes:.0f} minutes and {_seconds:.3f} seconds!")
-
     ax.set_facecolor("white")
     ax.axis("off")
     ax.set_aspect("equal")
 
     fig.set_facecolor("white")
     return plt
+
+
+def print_statistics():
+    print("########################################")
+    print("l_min: " + str(l_min))
+    print("l_max: " + str(l_max))
+    print("Ratio of resulting drawing: " + str(l_max / l_min))
+    print(f"The process took {_minutes:.0f} minutes and {_seconds:.3f} seconds!")
 
 
 if __name__ == "__main__":
