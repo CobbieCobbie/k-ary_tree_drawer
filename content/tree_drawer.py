@@ -3,10 +3,13 @@ import os
 import networkx as nx
 import time
 import logging as log
-import argparser as arg
+import streamlit as st
 from datetime import datetime
-
+import matplotlib
 import matplotlib.pyplot as plt
+
+import content.argparser as arg
+import content.draw_support as support
 
 
 class Vertex:
@@ -43,45 +46,14 @@ def main():
     
     # global variable initializations
     global k, h, integer_grid
-    k = args.k
-    h = args.h
-    integer_grid = args.integer
-    logging = args.logging
-    color = args.color
+    k = parser.k
+    h = parser.h
+    integer_grid = parser.integer
+    logging = parser.logging
+    color = parser.color
 
     plot = draw(k, h, integer_grid, logging, color)
     plot.show()
-
-
-def calc_hex_code():
-    global k, h
-    interval = min(k, h) * 255 / pow(k, h)
-    global col_b, col_g, col_r
-    if col_r == 255 and 0 <= col_g < 255 and col_b == 0:
-        col_g += interval
-        if col_g > 255:
-            col_g = 255
-    elif 0 < col_r <= 255 and col_g == 255 and col_b == 0:
-        col_r -= interval
-        if col_r < 0:
-            col_r = 0
-    elif 0 == col_r and col_g == 255 and 0 <= col_b < 255:
-        col_b += interval
-        if col_b > 255:
-            col_b = 255
-    elif 0 == col_r and 0 < col_g <= 255 and col_b == 255:
-        col_g -= interval
-        if col_g < 0:
-            col_g = 0
-    elif 0 <= col_r < 255 and 0 == col_g and col_b == 255:
-        col_r += interval
-        if col_r > 255:
-            col_r = 255
-    elif col_r == 255 and col_g == 0 and 0 < col_b <= 255:
-        col_b -= interval
-        if col_b < 0:
-            col_b = 0
-    return "#" + ('%02x%02x%02x' % (round(col_r), round(col_g), round(col_b)))
 
 
 def draw_vertices(v, r, h, k, G):
@@ -115,6 +87,7 @@ def draw_vertices(v, r, h, k, G):
             draw_vertices(v_child, r, h, k, G)
 
 
+st.cache_data(hash_funcs={matplotlib.figure.Figure: hash})
 def draw(k, h, integer, logging, color):
     integer_grid = integer
 
@@ -152,7 +125,7 @@ def draw(k, h, integer, logging, color):
     fig, ax = plt.subplots()
     pos = {v: v.coordinates for v in G}
     if color is True:
-        color_map = [calc_hex_code() for v in G]
+        color_map = [support.calc_hex_code() for v in G]
         color_map[0] = "#000000"
     else:
         color_map = ["#000000" for v in G]
@@ -165,26 +138,19 @@ def draw(k, h, integer, logging, color):
             style=":"
             )
 
-    # print results
+    # statistics
     _time = time.time() - _time
     _minutes = int(_time / 60)
     _seconds = _time % 60
     percentage = 0.0
+    support.print_statistics(_minutes, _seconds, l_min, l_max) 
 
-    ax.set_facecolor("white")
-    ax.axis("off")
-    ax.set_aspect("equal")
-
-    fig.set_facecolor("white")
+    #ax.set_facecolor("white")
+    #ax.axis("off")
+    #ax.set_aspect("equal")
+    plt.savefig("query" + ".png", dpi=300)
+    #fig.set_facecolor("white")
     return plt
-
-
-def print_statistics():
-    print("########################################")
-    print("l_min: " + str(l_min))
-    print("l_max: " + str(l_max))
-    print("Ratio of resulting drawing: " + str(l_max / l_min))
-    print(f"The process took {_minutes:.0f} minutes and {_seconds:.3f} seconds!")
 
 
 if __name__ == "__main__":
