@@ -1,4 +1,2 @@
-networkx >= 2.6.3
-matplotlib >= 3.5.1
-streamlit >= 1.1.1
+streamlit >= 1.28.0
 plotly >= 5.24.1
