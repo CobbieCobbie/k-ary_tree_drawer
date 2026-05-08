@@ -3,25 +3,12 @@ import os
 import networkx as nx
 import time
 import logging as log
-import streamlit as st
 from datetime import datetime
-import matplotlib
 import matplotlib.pyplot as plt
 
 import content.argparser as arg
 import content.draw_support as support
-
-
-class Vertex:
-    def __init__(self, x, y, h, id):
-        self.coordinates = (x, y)
-        self.height = h
-        self.id = id
-
-    def __repr__(self):
-        return "coordinates are: " \
-               + str(self.coordinates[0]) + "," + str(self.coordinates[1]) + \
-               "\n Height equals: " + str(self.height)
+import content.Vertex as Vertex
 
 
 integer_grid = False
@@ -87,7 +74,6 @@ def draw_vertices(v, r, h, k, G):
             draw_vertices(v_child, r, h, k, G)
 
 
-st.cache_data(hash_funcs={matplotlib.figure.Figure: hash})
 def draw(k, h, integer, logging, color):
     integer_grid = integer
 
@@ -150,7 +136,7 @@ def draw(k, h, integer, logging, color):
     #ax.set_aspect("equal")
     plt.savefig("query" + ".png", dpi=300)
     #fig.set_facecolor("white")
-    return plt
+    return fig
 
 
 if __name__ == "__main__":
